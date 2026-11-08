@@ -4,6 +4,7 @@
   "description": "MCP server that lets Claude request secrets through a native popup and use them without seeing them",
   "type": "module",
   "private": true,
+  "license": "MIT",
   "bin": { "secret-popup": "src/cli.js", "secret-popup-mcp": "src/server.js" },
   "engines": { "node": ">=20" },
   "scripts": { "test": "node --test" }

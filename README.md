@@ -82,3 +82,7 @@ This keeps secrets out of the chat transcript, out of git, and out of process li
 ```bash
 npm test
 ```
+
+## License
+
+[MIT](LICENSE)
