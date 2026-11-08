@@ -6,13 +6,20 @@ Node 20 or newer, no dependencies, macOS only for now.
 
 ## Install
 
+```bash
+git clone https://github.com/kwannoel/secret-popup.git
+cd secret-popup
+```
+
+There's nothing to `npm install`. The commands below use the absolute path of this folder, which `$PWD` fills in when you run them from inside it.
+
 **MCP server:** Claude finds the tools on its own, but only in sessions started after you add it.
 
 ```bash
-claude mcp add --scope user secret-popup -- node /Users/noelkwan/projects/secret-popup/src/server.js
+claude mcp add --scope user secret-popup -- node "$PWD/src/server.js"
 ```
 
-**Command line:** works in any session right away, including ones already running, but Claude has to be told it exists. Tell Claude something like: "To get a secret from me, run `node /Users/noelkwan/projects/secret-popup/src/cli.js --help`." Commands go through Claude's Bash tool, so your Bash permission rules and sandbox apply to them.
+**Command line:** works in any session right away, including ones already running, but Claude has to be told it exists. Tell Claude something like: "To get a secret from me, run `node /absolute/path/to/secret-popup/src/cli.js --help`." Commands go through Claude's Bash tool, so your Bash permission rules and sandbox apply to them.
 
 ## Tools
 
@@ -42,7 +49,7 @@ node src/cli.js run OPENAI_API_KEY -- 'curl -s https://api.openai.com/v1/models 
 
 For `run`, pass the command as one single-quoted argument. Otherwise the calling shell replaces `$OPENAI_API_KEY` with nothing before the tool sees it. The tool refuses a command split into several arguments, to catch this.
 
-From the command line the popup closes after 110 seconds, because Claude's Bash tool stops commands after 2 minutes by default. For longer, pass `--timeout` and give the Bash call a longer timeout too.
+From the command line the popup closes after 110 seconds, because Claude's Bash tool stops commands after 2 minutes by default. For longer, pass `--timeout` and give the Bash call a longer timeout too. If the popup times out, the CLI prints exactly what to pass. If Bash stops the CLI first, the popup closes too, so nothing typed into it is silently lost.
 
 Code that loads `.env` itself, using dotenv for example, needs no tool at all.
 

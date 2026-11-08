@@ -42,12 +42,14 @@ async function handle(line) {
     return send({ id: null, error: { code: -32700, message: 'Parse error' } });
   }
   if (message.id === undefined) return; // Notifications need no reply.
-  const method = METHODS[message.method];
+  const method = Object.hasOwn(METHODS, message.method) ? METHODS[message.method] : undefined;
   if (!method) return send({ id: message.id, error: { code: -32601, message: 'Method not found' } });
   send({ id: message.id, result: await method(message.params ?? {}) });
 }
 
 // Requests aren't awaited in sequence, so an open popup doesn't block other calls.
-createInterface({ input: process.stdin }).on('line', (line) => {
-  if (line.trim() !== '') handle(line);
-});
+createInterface({ input: process.stdin })
+  .on('line', (line) => {
+    if (line.trim() !== '') handle(line);
+  })
+  .on('close', () => process.exit(0));

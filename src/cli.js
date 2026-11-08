@@ -66,6 +66,11 @@ async function main(argv) {
       timeout,
     );
     print(result);
+    if (result.status === 'timed_out') {
+      process.stderr.write(
+        `secret-popup: the popup closed after ${timeout}s. To allow longer, rerun with --timeout 300 and set the Bash tool's timeout above 300000 ms.\n`,
+      );
+    }
     process.exitCode = ['saved', 'replaced', 'already_set'].includes(result.status) ? 0 : 1;
   } else if (command === 'list') {
     print(await listSecrets({ project_dir: projectDir }));
